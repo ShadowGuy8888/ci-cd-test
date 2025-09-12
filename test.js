@@ -1,6 +1,14 @@
-// simple test: check if 2+2 equals 4
-function testSum() {
-  if (2 + 2 !== 4) throw new Error('Math is broken');
-}
-testSum();
-console.log('All tests passed!');
+// Import the function we want to test
+const { increment } = require('./counterLogic.js');
+
+// Test the pure function
+test('increment function adds 1 to the current count', () => {
+    // Test case 1: Normal increment
+    expect(increment(0)).toBe(1);
+    
+    // Test case 2: Increment from a different number
+    expect(increment(5)).toBe(6);
+    
+    // Test case 3: Increment a negative number
+    expect(increment(-3)).toBe(-2);
+});
