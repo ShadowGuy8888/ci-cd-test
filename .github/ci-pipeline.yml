@@ -6,7 +6,7 @@ on:
   push: # Trigger on any push to the repository...
     branches: [ main ] # ...but only to the 'main' branch
   pull_request: # Also trigger on any pull request...
-    branches: [ main ] # ...that is targeting the 'main' branch
+    branches: [ main ] # ...that is targeting the 'main' branch 
 
 # The jobs that this workflow will execute
 jobs:
