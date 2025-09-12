@@ -1,0 +1,36 @@
+# ci-pipeline.yml
+name: CI Pipeline # The name of your workflow, shows up in the GitHub Actions tab
+
+# The event that triggers the workflow
+on:
+  push: # Trigger on any push to the repository...
+    branches: [ main ] # ...but only to the 'main' branch
+  pull_request: # Also trigger on any pull request...
+    branches: [ main ] # ...that is targeting the 'main' branch
+
+# The jobs that this workflow will execute
+jobs:
+  test: # The first (and only) job is called "test"
+    name: Run Tests # A friendly name for the job
+    runs-on: ubuntu-latest # The type of machine to run the job on. Ubuntu is the most common.
+
+    # The sequence of steps the job will execute
+    steps:
+      # Step 1: Checkout the code from the repository
+      - name: Checkout code
+        uses: actions/checkout@v4 # This is a pre-built action from GitHub to get your code
+
+      # Step 2: Set up the correct version of Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Uses Node.js version 20 (LTS)
+
+      # Step 3: Install your project dependencies (Jest and jsdom)
+      # This reads your package.json and package-lock.json to install everything
+      - name: Install dependencies
+        run: npm ci # 'npm ci' is faster and more reliable for CI than 'npm install'
+
+      # Step 4: Run your Jest test suite
+      - name: Run tests with Jest
+        run: npm test
