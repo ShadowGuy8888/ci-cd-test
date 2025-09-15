@@ -10,7 +10,8 @@ on:
 
 # The jobs that this workflow will execute
 jobs:
-  test: # The first (and only) job is called "test"
+  # JOB 1: The Test Job (This is your CI)
+  test: 
     name: Run Tests # A friendly name for the job
     runs-on: ubuntu-latest # The type of machine to run the job on. Ubuntu is the most common.
 
@@ -24,7 +25,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20' # Uses Node.js version 20 (LTS)
+          node-version: '22' # Uses Node.js version 22 (LTS)
 
       # Step 3: Install your project dependencies (Jest and jsdom)
       # This reads your package.json and package-lock.json to install everything
@@ -34,3 +35,44 @@ jobs:
       # Step 4: Run your Jest test suite
       - name: Run tests with Jest
         run: npm test
+
+  # JOB 2: The Deploy Job (This is your CD)
+  deploy:
+    name: Deploy to GitHub Pages
+    # CRITICAL: This job will only run if the "test" job completes successfully
+    needs: test
+    # Only run this job on pushes to the master branch, not pull requests
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+
+    # Grant the correct permissions for the GITHUB_TOKEN to deploy
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+
+    # Define an environment for the deployment (optional but good practice)
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      # Step 1: Checkout the code that just passed the tests
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Configure GitHub Pages
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      # Step 3: Upload the build artifact (our static files)
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Upload EVERY file in the repository root
+          path: '.'
+
+      # Step 4: Deploy it!
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

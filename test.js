@@ -1,5 +1,6 @@
 // Import the function we want to test
-const { increment } = require('./counterLogic.js');
+const { describe, expect, test } = require("@jest/globals");
+const { increment } = require("./counterLogic.js");
 
 // Test the pure function
 test('increment function adds 1 to the current count', () => {
@@ -11,4 +12,6 @@ test('increment function adds 1 to the current count', () => {
     
     // Test case 3: Increment a negative number
     expect(increment(-3)).toBe(-2);
+
+    expect(increment(9999)).toBe(10000);
 });

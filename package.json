@@ -1,7 +1,6 @@
 {
   "name": "ci-cd-test",
   "version": "1.0.0",
-  "main": "script.js",
   "scripts": {
     "test": "jest"
   },
