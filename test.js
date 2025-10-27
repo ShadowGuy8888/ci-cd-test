@@ -15,4 +15,5 @@ test('increment function adds 1 to the current count', () => {
 
     expect(increment(9999)).toBe(10000);
 });
+console.log("DEF")
 console.log("ABC")
